@@ -1,0 +1,29 @@
+
+services:
+  main-db:
+    image: postgres:16.1
+    container_name: TestCase-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=TestCase-db
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+  TestCase:
+    build: main-server
+    image: TestCase
+    container_name: ewm-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      main-db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/TestCase-db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
