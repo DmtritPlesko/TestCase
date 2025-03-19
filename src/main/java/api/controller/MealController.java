@@ -9,8 +9,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-
 @RestController
 @RequestMapping(path = "/api/v1/meals")
 @RequiredArgsConstructor
@@ -27,14 +25,14 @@ public class MealController {
     @GetMapping(path = "/report/{userId}")
     public ReportDto createReport(@PathVariable("userId") Long id,
                                   @RequestParam("date")
-                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String date) {
 
         return service.createReportByDay(id,date);
     }
 
     @GetMapping(path = "/{userId}")
     public ReportDto history(@PathVariable("userId") Long id) {
-
+        return service.history(id);
     }
 
 }

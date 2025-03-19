@@ -12,7 +12,7 @@ public interface MealRepository extends JpaRepository<Meal,Long> {
     @Query("SELECT m FROM Meal m JOIN FETCH m.products WHERE m.user.id = :userId")
     List<Meal> findByUserIdWithProducts(@Param("userId") Long userId);
 
-    @Query("SELECT m FROM Meal m JOIN FETCH m.products WHERE m.user.id = :userId AND DATE(m.dateTime) = :date")
+    @Query("SELECT m FROM Meal m JOIN FETCH m.products WHERE m.user.id = :userId AND CAST(m.dateTime AS date) = :date")
     List<Meal> findAllByUserIdAndDateWithProducts(@Param("userId") Long userId, @Param("date") LocalDate date);
 
 }

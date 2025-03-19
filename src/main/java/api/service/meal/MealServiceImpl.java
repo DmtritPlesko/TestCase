@@ -41,33 +41,37 @@ public class MealServiceImpl implements MealService {
 
         log.info("Добавление приёма пищи");
 
-        if (!userRepository.existsById(mealDto.getUserId())) {
-            throw new NotFoundException("Пользователь с id = " + mealDto.getUserId() + " не найден");
+        User user = userRepository.findById(mealDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+
+        Meal meal = new Meal();
+        meal.setDateTime(mealDto.getDateTime());
+        meal.setUser(user);
+
+        List<Product> products = productRepository.findAllById(mealDto.getProducts());
+        if (products.size() != mealDto.getProducts().size()) {
+            throw new RuntimeException("Некоторые продукты не найдены");
         }
+        meal.setProducts(products);
 
-        List<Long> productId = mealDto.getProducts().stream()
-                .filter(productRepository::existsById)
-                .toList();
+        Meal savedMeal = mealRepository.save(meal);
 
-        if (productId.size() != mealDto.getProducts().size()) {
-            throw new NotFoundException("Некоторые продукты не содержатся в базе данных");
-        }
-
-        return mealMapper.toMealDto(mealRepository.save(mealMapper.toMeal(mealDto)));
+        return mealMapper.toMealDto(savedMeal);
     }
 
     @Override
-    public ReportDto createReportByDay(Long userId, LocalDate dateTime) {
+    public ReportDto createReportByDay(Long userId, String date) {
 
-        log.info("Формирование отчёта за {} для пользователя с id = {}", dateTime, userId);
+        log.info("Формирование отчёта за {} для пользователя с id = {}", date, userId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id = " + userId + " не найден"));
 
-        List<Meal> meals = mealRepository.findAllByUserIdAndDateWithProducts(userId, dateTime);
+        LocalDate datedate = LocalDate.parse(date.trim());
+        List<Meal> meals = mealRepository.findAllByUserIdAndDateWithProducts(userId, datedate);
 
         if (meals.isEmpty()) {
-            throw new NotFoundException("Нет записей за " + dateTime + " для пользователя с id = " + userId);
+            throw new NotFoundException("Нет записей за " + date + " для пользователя с id = " + userId);
         }
 
         DailyNutritionSummary dailyNutritionSummary = calculateDailyNutrition(meals);
@@ -112,9 +116,8 @@ public class MealServiceImpl implements MealService {
 
         for (Meal meal : meals) {
 
-            caloriesPerDay += meal.getUser().getCalories();
-
             for (Product product : meal.getProducts()) {
+                caloriesPerDay += product.getCaloriesPerPortion();
                 squirrels += product.getSquirrels();
                 fats += product.getFats();
                 carbohydrates += product.getCarbohydrates();

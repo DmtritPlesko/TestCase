@@ -8,7 +8,7 @@ public interface MealService {
 
     MealDto addMeal(MealDto mealDto);
 
-    ReportDto createReportByDay(Long id, LocalDate dateTime);
+    ReportDto createReportByDay(Long id, String dateTime);
 
     ReportDto history(Long id);
 }
