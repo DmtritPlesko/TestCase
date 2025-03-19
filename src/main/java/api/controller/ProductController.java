@@ -22,17 +22,4 @@ public class ProductController {
     public ProductDto addProduct(@Valid @RequestBody ProductDto productDto) {
         return service.addProduct(productDto);
     }
-
-    @PatchMapping(path = "/{productId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ProductDto updateProduct(@PathVariable("productId") Long id,
-                                    @RequestBody ProductDto productDto ) {
-        return service.updateProduct(id,productDto);
-    }
-
-    @DeleteMapping(path = "/{productId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(@PathVariable("productId") Long id) {
-        service.deleteProduct(id);
-    }
 }

@@ -8,9 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface MealMapper {
 
-    @Mapping(target = "user.id",source = "mealDto.userId")
-    Meal toMeal(MealDto mealDto);
-
     @Mapping(target = "userId", source = "meal.user.id")
+    @Mapping(target = "products",ignore = true)
     MealDto toMealDto(Meal meal);
 }

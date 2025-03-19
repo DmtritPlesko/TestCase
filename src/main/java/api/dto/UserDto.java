@@ -1,22 +1,32 @@
 package api.dto;
 
+import api.enums.Gender;
 import api.enums.Target;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
+
+    public UserDto(String name, Gender gender, Short age, Float weight, Float height) {
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
+        this.weight = weight;
+        this.height = height;
+    }
 
     @NotBlank
     String name;
 
-    @NotBlank
-    String gender;
+    Gender gender;
 
     @Email
     @NotBlank

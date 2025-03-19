@@ -3,6 +3,7 @@ package api.model;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
@@ -12,9 +13,18 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "meals")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Meal {
+
+    public Meal (Long id, LocalDateTime dateTime, User user, List<Product> products) {
+        this.id= id;
+        this.dateTime =dateTime;
+        this.user = user;
+        this.products = products;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

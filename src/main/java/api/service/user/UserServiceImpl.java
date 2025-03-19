@@ -46,41 +46,6 @@ public class UserServiceImpl implements UserService {
         return mapper.toUserDto(repository.save(user));
     }
 
-    @Override
-    public void delete(Long userId) {
-
-        if (repository.existsById(userId)) {
-            repository.deleteById(userId);
-        }
-
-        throw new NotFoundException("Пользователь с id = " + userId + " не найден");
-
-    }
-
-    @Override
-    public UserDto updateUser(Long userId, UserDto userDto) {
-
-        User user = repository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id = " + userId + " не найден"));
-
-        if (Objects.equals(user.getHeight(), userDto.getHeight()) &&
-                Objects.equals(user.getAge(), userDto.getAge()) &&
-                Objects.equals(user.getGender(), userDto.getGender()) &&
-                Objects.equals(user.getWeight(), userDto.getWeight())) {
-            return mapper.toUserDto(repository.save(mapper.updateUser(user, userDto)));
-        }
-
-        mapper.updateUser(user, userDto);
-        user.setCalories(calculateCalories(
-                user.getGender(),
-                user.getAge(),
-                user.getWeight(),
-                user.getHeight())
-        );
-
-        return mapper.toUserDto(user);
-    }
-
     private Float calculateCalories(Gender gender, Short age, Float weight, Float height) {
 
         double result = 0;

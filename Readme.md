@@ -15,6 +15,32 @@ REST API сервис для отслеживания ежедневного п�
 - Maven для сборки
 - Spring Boot 3.x
 
+## Запуск в разных профилях
+### 1. PostgreSQL через Docker
+```bash
+# Запуск PostgreSQL контейнера
+docker run -d --name calorie-postgres \
+  -p 5432:5432 \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=your_password \
+  postgres:latest
+```
+
+### 2. H2 для тестирования
+```bash
+# Запуск приложения с профилем H2
+mvn spring-boot:run -Dspring.profiles.active=test
+```
+
+### 3. Docker Compose (рекомендуемый способ)
+```bash
+# Запуск через Docker Compose
+docker-compose up -d
+
+# Остановка
+docker-compose down
+```
+
 ## API Эндпоинты
 ### Пользователи
 #### Создание пользователя
@@ -30,21 +56,6 @@ Content-Type: application/json
   "target": "LOSE_WEIGHT"
 }
 ```
-
-#### Обновление пользователя
-```bash
-PATCH /users/{userId}
-Content-Type: application/json
-{
-  "weight": 85
-}
-```
-
-#### Удаление пользователя
-```bash
-DELETE /users/{userId}
-```
-
 ### Блюда
 #### Добавление блюда
 ```bash
@@ -57,20 +68,6 @@ Content-Type: application/json
   "fats": 15,
   "carbs": 5
 }
-```
-
-#### Обновление блюда
-```bash
-PATCH /products/{productId}
-Content-Type: application/json
-{
-  "calories": 220
-}
-```
-
-#### Удаление блюда
-```bash
-DELETE /products/{productId}
 ```
 
 ### Приемы пищи

@@ -17,7 +17,4 @@ public interface UserMapper {
 
     UserDto toUserDto(User user);
 
-    @Mapping(target = "id",ignore = true)
-    @Mapping(target = "calories",ignore = true)
-    User updateUser(@MappingTarget User user , UserDto userDto);
 }

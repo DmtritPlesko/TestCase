@@ -16,6 +16,4 @@ public interface ProductMapper {
 
     ProductDto toProductDto(Product product);
 
-    @Mapping(target = "id",ignore = true)
-    Product updateProduct(@MappingTarget Product product , ProductDto productDto);
 }

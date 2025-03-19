@@ -23,16 +23,4 @@ public class UserController {
         return service.addUser(userDto);
     }
 
-    @PatchMapping(path = "/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public UserDto update(@PathVariable("userId") Long id, @RequestBody UserDto userDto) {
-        return service.updateUser(id, userDto);
-    }
-
-    @DeleteMapping(path = "/{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("userId") Long id) {
-        service.delete(id);
-    }
-
 }
